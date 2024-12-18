@@ -68,7 +68,7 @@ const DCA = async (asset, size) => {
         price: parseFloat(request.order_configuration.limit_limit_gtc.limit_price),
     };
 	
-	console.log('Order placed: ', orderInfo.id);
+	console.log('Order placed: ', orderInfo.id + '\nPrice: ' + orderInfo.price);
 
     while (!(await IsOrderFilled(orderInfo.id))) {
         const newPrice = parseFloat(await shouldTryPrice());
