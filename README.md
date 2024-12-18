@@ -20,6 +20,10 @@ eg. if we want to buy `BTC-USDT` and it's lowest sell price is `$51,344.32`, we 
 
 After we constantly check the order to see if it's been filled. If it keep's moving against our direction we will simply edit the order and keep the limit price close to the opposite price of the asset.
 
+<img src="https://raw.githubusercontent.com/LukasOgunfeitimi/Coinbase-DCA/main/DCA.png" alt="DCA Image" width="250" />
+
+In this example, I placed an order to buy `FET-USDT` at `1.5781`, but it monitored that the priced directly below the lowest sell price was `1.5789`, therefore it edited the order at that price and later it was filled.
+
 In every [fee tier](https://help.coinbase.com/en/exchange/trading-and-funding/exchange-fees) in Coinbase you will see being the maker will save you about a half on fees than being a taker. This project will attempt to place orders like you're a taker but they're actually maker orders. 
 ### DCA Workflow:
 1. **Price Monitoring**: Continuously monitors the lowest bid price for the asset.
