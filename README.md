@@ -25,6 +25,13 @@ After we constantly check the order to see if it's been filled. If it keep's mov
 In this example, I placed an order to buy `FET-USDT` at `1.5781`, but it monitored that the priced directly below the lowest sell price was `1.5789`, therefore it edited the order at that price and later it was filled.
 
 In every [fee tier](https://help.coinbase.com/en/exchange/trading-and-funding/exchange-fees) in Coinbase you will see being the maker will save you about a half on fees than being a taker. This project will attempt to place orders like you're a taker but they're actually maker orders. 
+
+### Info 
+What is a `POST ONLY` order?
+> [Coinbase Order Types](https://help.coinbase.com/en/coinbase/trading-and-funding/advanced-trade/order-types)
+> Post only will ensure that your limit order is posted to the order book and sits on the order book to be charged maker fees if it is filled. If any part of the order is executed immediately due to its price when arriving at the matching engine, the entire order will be rejected. This is useful for ensuring that an order is not subject to taker fees, if desired.
+>
+> 
 ### DCA Workflow:
 1. **Price Monitoring**: Continuously monitors the lowest bid price for the asset.
 2. **Order Placement**: Places an order based on a calculated price.
@@ -55,10 +62,11 @@ module.exports = {
 
 ### Usage
 
-To use the DCA feature `cd` into `operations` and run DCA.js with these parameters
-`node dca <asset-name> <base-size> <interval-in-minutes>`
+- `cd` into `operations`
 
-### Info 
-What is a `POST ONLY` order?
-> [Coinbase Order Types](https://help.coinbase.com/en/coinbase/trading-and-funding/advanced-trade/order-types)
-> Post only will ensure that your limit order is posted to the order book and sits on the order book to be charged maker fees if it is filled. If any part of the order is executed immediately due to its price when arriving at the matching engine, the entire order will be rejected. This is useful for ensuring that an order is not subject to taker fees, if desired.
+- To use the DCA feature run DCA.js with these parameters
+
+    `node dca <asset-name> <base-size> <interval-in-minutes>`
+
+- To get your account information just run node accountinfo
+
