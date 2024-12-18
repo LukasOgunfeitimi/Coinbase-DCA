@@ -37,7 +37,13 @@ In every [fee tier](https://help.coinbase.com/en/exchange/trading-and-funding/ex
 
 - Node.js and npm installed on your system.
 - Access to the [Coinbase API](https://www.coinbase.com/) with a valid API name and key. 
-- Input the API name and key in the `config.js` file.
+- Make a `config.js` file and input the API name and key like so.
+```js
+module.exports = {
+    API_NAME: 'organizations',
+    API_KEY: '-----BEGIN EC PRIVATE KEY-----\n\n-----END EC PRIVATE KEY-----\n'
+}
+```
 
 ### Installation
 
@@ -46,6 +52,11 @@ In every [fee tier](https://help.coinbase.com/en/exchange/trading-and-funding/ex
    ```bash
    git clone https://github.com/LukasOgunfeitimi/Coinbase-DCA.git
    cd Coinbase-DCA
+
+### Usage
+
+To use the DCA feature `cd` into `operations` and run DCA.js with these parameters
+`node dca <asset-name> <base-size> <interval-in-minutes>`
 
 ### Info 
 What is a `POST ONLY` order?
