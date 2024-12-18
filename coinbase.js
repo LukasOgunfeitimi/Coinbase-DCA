@@ -1,33 +1,38 @@
 const crypto = require('crypto');
 const { order, prices, account } = require('./requests');
-const send = require('../webhook.js');
+//const send = require('../webhook.js');
 const request = require('./request.js');
-
 const start = new Date('2024-11-20T20:00:00');
-const baseUrl = 'https://api.coinbase.com';
 
-const getCoinbase = async () => {
-	const portfolio_uuid = '48c3e762-030b-532e-9bfe-784d71231c3d';
-	const account_uuid = '088f02f0-d1bd-5de5-b0ad-3ae2fefaba05';
+
+const getAccountInformation = async () => {
+    const acc = await account.getAllAccounts();
+    const { 
+        uuid: account_uuid,
+        retail_portfolio_id: portfolio_uuid,
+        available_balance: value
+    } = acc.accounts.find(account => account.name === "GBP Wallet");
+
 	const isEmpty = (obj) => Object.keys(obj).length === 0;
-
 	const getAmounts = data => 
 		data.filter(s => s.status === "completed" && new Date(s.created_at) > start)
 		.reduce((total, s) => total + parseFloat(s.amount?.amount || 0), 0);
-	const balanceRes = await request(`${baseUrl}/api/v3/brokerage/portfolios/${portfolio_uuid}`, 'GET');
-	const depositsRes = await request(`${baseUrl}/v2/accounts/${account_uuid}/deposits`, 'GET');
-	const withdrawalsRes = await request(`${baseUrl}/v2/accounts/${account_uuid}/withdrawals`, 'GET');
+
+	const balanceRes = await account.getPortfolio(portfolio_uuid);
+	const depositsRes = await account.getAccountDeposits(account_uuid);
+	const withdrawalsRes = await account.getAccountWithdrawals(account_uuid);
 
 	if (isEmpty(balanceRes) || isEmpty(depositsRes) || isEmpty(withdrawalsRes)) return;
 
-	const balance = parseFloat(balanceRes.breakdown.portfolio_balances.total_balance.value);
+	const worth = parseFloat(balanceRes.breakdown.portfolio_balances.total_balance.value);
 	const deposits = getAmounts(depositsRes.data);
 	const withdrawals = getAmounts(withdrawalsRes.data);
 
-	const profit = Math.round(balance - (deposits - withdrawals), 2);
+	const profit = Math.round(worth - (deposits - withdrawals), 2);
 
-	const data = { balance, deposits, withdrawals, profit };
-	return data;
+	const data = { worth, deposits, withdrawals, profit };
+
+	Promise.resolve(data);
 };
 
 /**
@@ -41,9 +46,8 @@ const getCoinbase = async () => {
  * @param {*} Size Amount in USD, for some reason Coinbase only let you edit orders in the base price (FET)
  */
 const DCA = async (asset, size) => {
-	const info = await prices.getPrice(asset);
+	const info = await prices.getAsset(asset);
 	if (info.error) Promise.reject(info.message);
-
 	console.log("Starting DCA for " + info.product_id);
 
 	const quoteDigits = info.quote_increment.split('.')[1].length;
@@ -106,7 +110,7 @@ const startDCA = async () => {
     }
     //setTimeout(startDCA, 60 * 60 * 1000); 
 };
-
+//getCoinbase();
 startDCA(); 
 
 //module.exports = getCoinbase;
