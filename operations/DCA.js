@@ -63,16 +63,17 @@ const DCA = async (asset, size) => {
     return Promise.resolve(orderInfo);
 };
 
+// args: <asset-name> <base-size> <interval-in-minutes>
 const args = process.argv.slice(2);
 
 const startDCA = async () => {
     try {
         const dca = await DCA(args[0], parseFloat(args[1])); 
         console.log('Order process completed');
+        setTimeout(startDCA, parseInt(args[2]) * 60 * 1000); 
     } catch (e) {
         console.error('Error processing order:', e);
     }
-    setTimeout(startDCA, parseInt(args[2]) * 60 * 1000); 
 };
 
 startDCA();

@@ -1,10 +1,6 @@
 const crypto = require('crypto');
 const { sign } = require('jsonwebtoken');
 const { API_NAME, API_KEY } = require('./config.js');
-const { name, privateKey } = {
-    "name": API_NAME,
-    "privateKey": API_KEY
-};
 
 function generateToken(method, url, path) {
     const algorithm = "ES256";
@@ -14,14 +10,14 @@ function generateToken(method, url, path) {
         iss: "cdp",
         nbf: Math.floor(Date.now() / 1000),
         exp: Math.floor(Date.now() / 1000) + 120,
-        sub: name,
+        sub: API_NAME,
         uri,
     },
-    privateKey, 
+    API_KEY, 
     {
         algorithm,
         header: {
-        kid: name,
+        kid: API_NAME,
         nonce: crypto.randomBytes(16).toString("hex"),
         },
     }

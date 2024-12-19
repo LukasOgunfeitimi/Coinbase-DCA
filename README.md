@@ -68,5 +68,5 @@ module.exports = {
 
     `node dca <asset-name> <base-size> <interval-in-minutes>`
 
-- To get your account information just run node accountinfo
+- To get your account information just run `node accountinfo`
 
