@@ -12,7 +12,7 @@ const { sleep } = require('../utils.js');
  * @param {*} asset Symbol name
  * @param {*} Size Amount in base size, for some reason Coinbase only let you edit orders in the base price (FET)
  */
-module.exports = async (asset, size) => {
+async function placeOrder(asset, size) {
     const info = await prices.getAsset(asset);
     if (info.error) Promise.reject(info.message);
     console.log("Starting DCA for " + info.product_id);
@@ -62,3 +62,5 @@ module.exports = async (asset, size) => {
     // make last get order request to retrieve final fee
     return Promise.resolve(orderInfo);
 };
+
+module.exports = placeOrder;

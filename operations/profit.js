@@ -1,7 +1,7 @@
 const { account } = require('../requests');
-const start = new Date('2024-12-12T20:00:00');
+const startDate = new Date('2024-12-12T20:00:00');
 
-const getProfit = async () => {
+async function getProfit(start = startDate) {
     const acc = await account.getAllAccounts();
     const { 
         uuid: account_uuid,
@@ -28,7 +28,7 @@ const getProfit = async () => {
 
     const data = { worth, deposits, profit };
 
-    console.log(data)
+    return data;
 };
 
-getProfit();
+module.exports = getProfit;
