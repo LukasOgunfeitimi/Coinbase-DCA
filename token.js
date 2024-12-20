@@ -17,8 +17,8 @@ function generateToken(method, url, path) {
     {
         algorithm,
         header: {
-        kid: API_NAME,
-        nonce: crypto.randomBytes(16).toString("hex"),
+            kid: API_NAME,
+            nonce: crypto.randomBytes(16).toString("hex"),
         },
     }
     );

@@ -60,17 +60,19 @@ const DCA = async (asset, size) => {
 
         await new Promise(resolve => setTimeout(resolve, 2000)); 
     }
+
+    // make last get order request to retrieve final fee
     return Promise.resolve(orderInfo);
 };
 
 // args: <asset-name> <base-size> <interval-in-minutes>
-const args = process.argv.slice(2);
+const [asset, size, minutes] = process.argv.slice(2);
 
 const startDCA = async () => {
     try {
-        const dca = await DCA(args[0], parseFloat(args[1])); 
+        const dca = await DCA(asset, parseFloat(size)); 
         console.log('Order process completed');
-        setTimeout(startDCA, parseInt(args[2]) * 60 * 1000); 
+        setTimeout(startDCA, parseInt(minutes) * 60 * 1000); 
     } catch (e) {
         console.error('Error processing order:', e);
     }
