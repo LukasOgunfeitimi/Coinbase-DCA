@@ -2,6 +2,7 @@ const { order, prices } = require('../requests/index.js');
 const { sleep } = require('../utils.js');
 
 /**
+ * Place an order using POST_ONLY to save on fees
  * 1. Get the lowest sell price
  * 2. Place a post only order at the smallest increment below the 
  * 	  lowest sell price to trade with lowest possible fee

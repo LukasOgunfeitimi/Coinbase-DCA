@@ -1,7 +1,7 @@
 const { account } = require('../requests');
-const start = new Date('2024-11-20T20:00:00');
+const start = new Date('2024-12-12T20:00:00');
 
-const getAccountInformation = async () => {
+const getProfit = async () => {
     const acc = await account.getAllAccounts();
     const { 
         uuid: account_uuid,
@@ -16,19 +16,19 @@ const getAccountInformation = async () => {
 
     const balanceRes = await account.getPortfolio(portfolio_uuid);
     const depositsRes = await account.getAccountDeposits(account_uuid);
-    const withdrawalsRes = await account.getAccountWithdrawals(account_uuid);
+    //const withdrawalsRes = await account.getAccountWithdrawals(account_uuid);
 
-    if (isEmpty(balanceRes) || isEmpty(depositsRes) || isEmpty(withdrawalsRes)) return;
+    if (isEmpty(balanceRes) || isEmpty(depositsRes)) return { error: "Failed" };
 
     const worth = parseFloat(balanceRes.breakdown.portfolio_balances.total_balance.value);
     const deposits = getAmounts(depositsRes.data);
-    const withdrawals = getAmounts(withdrawalsRes.data);
+    //const withdrawals = getAmounts(withdrawalsRes.data);
 
-    const profit = Math.round(worth - (deposits - withdrawals), 2);
+    const profit = (worth - deposits).toFixed(2);
 
-    const data = { worth, deposits, withdrawals, profit };
+    const data = { worth, deposits, profit };
 
     console.log(data)
 };
 
-getAccountInformation();
+getProfit();
