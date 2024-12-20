@@ -1,4 +1,4 @@
-const uuidv4 = require('../utils/uuid4.js');
+const { uuid } = require('../utils.js');
 const request = require('../request.js');
 
 module.exports = {

@@ -1,4 +1,5 @@
-const { order, prices } = require('../requests');
+const { order, prices } = require('../requests/index.js');
+const { sleep } = require('../utils.js');
 
 /**
  * 1. Get the lowest sell price
@@ -10,7 +11,7 @@ const { order, prices } = require('../requests');
  * @param {*} asset Symbol name
  * @param {*} Size Amount in base size, for some reason Coinbase only let you edit orders in the base price (FET)
  */
-const DCA = async (asset, size) => {
+module.exports = async (asset, size) => {
     const info = await prices.getAsset(asset);
     if (info.error) Promise.reject(info.message);
     console.log("Starting DCA for " + info.product_id);
@@ -40,10 +41,6 @@ const DCA = async (asset, size) => {
         const difference = Math.abs(orderInfo.price - newPrice).toFixed(quoteDigits);
 
         if (difference > quoteIncrement * 3) {
-            console.log('Difference over threshold: ', difference);
-            console.log('Order Price: ', orderInfo.price);
-            console.log('Current Lowest Bid: ', newPrice);
-            console.log('Order size', orderInfo.size);
             const edit = await order.edit(orderInfo.id, orderInfo.size, newPrice.toString());
             if (edit.success) {
                 console.log('Edited order to: ', newPrice);
@@ -58,24 +55,9 @@ const DCA = async (asset, size) => {
             console.log('------------------------------------');
         }
 
-        await new Promise(resolve => setTimeout(resolve, 2000)); 
+        await sleep(2000); 
     }
 
     // make last get order request to retrieve final fee
     return Promise.resolve(orderInfo);
 };
-
-// args: <asset-name> <base-size> <interval-in-minutes>
-const [asset, size, minutes] = process.argv.slice(2);
-
-const startDCA = async () => {
-    try {
-        const dca = await DCA(asset, parseFloat(size)); 
-        console.log('Order process completed');
-        setTimeout(startDCA, parseInt(minutes) * 60 * 1000); 
-    } catch (e) {
-        console.error('Error processing order:', e);
-    }
-};
-
-startDCA();
